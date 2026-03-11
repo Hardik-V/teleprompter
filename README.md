@@ -8,6 +8,7 @@ A clean, minimal teleprompter that works on Android, Windows, and any modern bro
 - **Manual scroll**: tap right side to advance, left to go back
 - **Pause on tap** (auto mode)
 - **Confidence mode**: text dims based on distance from the current line, drawing your eye naturally to where you are
+- **Line spacing option**: change line spacing between 3 modes
 - **Font size control** (editor + live in HUD)
 - **Max width control**: Narrow / Mid / Wide — useful for near-camera laptop use vs. tablet
 - **Alignment toggle**: Left or Centre aligned text
