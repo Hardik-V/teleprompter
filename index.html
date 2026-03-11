@@ -738,6 +738,9 @@
   }
 
   // ── TEXT → DISPLAY LINES ──
+  // Splits text into teleprompter lines:
+  // 1. Split on sentence endings (. ! ?)
+  // 2. Hard-wrap any chunk still longer than MAX_CHARS at word boundaries
   const MAX_CHARS = 72;
 
   function textToLines(text) {
@@ -819,6 +822,7 @@
       manualStep = fontSize * LINES_PER_TAP * 1.58;
       updateConfidenceLines();
       updateTimeRemaining();
+      hidePauseIndicator();
 
       if (mode === 'auto') {
         isPlaying = true; updatePlayBtn(); startScrollLoop();
