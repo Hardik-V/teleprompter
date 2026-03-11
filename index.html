@@ -835,7 +835,8 @@
     document.getElementById('prompter-screen').addEventListener('mousemove', handleMouseMove);
     document.getElementById('scroll-container').addEventListener('click', handleCenterTap);
     document.addEventListener('keydown', handleKey);
-    document.getElementById('scroll-container').addEventListener('touchstart', handleTouch, {passive:true});
+    document.getElementById('scroll-container').addEventListener('touchstart', handleTouchStart, {passive:true});
+    document.getElementById('scroll-container').addEventListener('touchend', handleTouchEnd, {passive:true});
   }
 
   function recalcTotal() {
@@ -942,13 +943,31 @@
   }
 
   function handleCenterTap(e) {
+    // Only handle mouse clicks — touch is handled by handleTouchEnd
+    if (e.pointerType === 'touch') return;
     if (e.target.closest('#hud') || e.target.closest('#tap-left') || e.target.closest('#tap-right')) return;
     if (mode === 'auto') { togglePlayPause(); spawnTapFlash(e.clientX, e.clientY); }
   }
 
-  function handleTouch(e) {
+  let touchStartTime = 0;
+  let touchStartY = 0;
+
+  function handleTouchStart(e) {
+    touchStartTime = Date.now();
+    touchStartY = e.touches[0].clientY;
+  }
+
+  function handleTouchEnd(e) {
     if (e.target.closest('#hud') || e.target.closest('#tap-left') || e.target.closest('#tap-right')) return;
-    if (mode === 'auto') togglePlayPause();
+    const elapsed = Date.now() - touchStartTime;
+    const movedY = e.changedTouches[0].clientY - touchStartY;
+    // Only treat as a tap if quick (<250ms) and didn't scroll much (<10px)
+    if (elapsed < 250 && Math.abs(movedY) < 10) {
+      if (mode === 'auto') {
+        togglePlayPause();
+        spawnTapFlash(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+      }
+    }
   }
 
   function updatePlayBtn() {
