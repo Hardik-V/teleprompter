@@ -45,7 +45,7 @@ A clean, minimal teleprompter that works on Android, Windows, and any modern bro
 1. Fork or clone this repo
 2. Go to **Settings → Pages**
 3. Set source to `main` branch, root `/`
-4. Your app will be live at `https://yourusername.github.io/prompter`
+4. Your app will be live at `https://yourusername.github.io/teleprompter`
 
 ## Local Development
 
