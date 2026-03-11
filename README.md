@@ -49,4 +49,4 @@ A clean, minimal teleprompter that works on Android, Windows, and any modern bro
 
 ## Local Development
 
-Just open `index.html` in a browser. No build step needed — it's a single HTML file.
+Just open `index.html` in a browser. No build step needed it's a single HTML file.
