@@ -1002,18 +1002,65 @@
   }
 
   // ── MANUAL ──
-  function manualForward() {
-    scrollPos = Math.min(totalHeight, scrollPos + manualStep);
-    applyScroll(); updateProgress(); updateConfidenceLines();
-    if (scrollPos >= totalHeight) showEndScreen();
-    spawnTapFlashCenter('right');
+  // Smooth nudge — shared by manual taps and auto-mode arrow keys
+  // step = fraction of viewport height to move
+  let nudgeAnim = null;
+
+  function getActiveLineIdx() {
+    const viewH    = document.getElementById('scroll-container').clientHeight;
+    const readingY = scrollPos + viewH * 0.42;
+    let idx = 0;
+    for (let i = 0; i < lineOffsets.length; i++) {
+      if (lineOffsets[i] <= readingY) idx = i;
+      else break;
+    }
+    return idx;
   }
 
-  function manualBack() {
-    scrollPos = Math.max(0, scrollPos - manualStep);
-    applyScroll(); updateProgress(); updateConfidenceLines();
-    spawnTapFlashCenter('left');
+  function nudgeScroll(direction, side) {
+    let target;
+
+    if (confidenceOn && lineOffsets.length) {
+      // Move exactly one line forward or back
+      const current = getActiveLineIdx();
+      const nextIdx = Math.min(lineOffsets.length - 1, Math.max(0, current + direction));
+      // Scroll so the target line sits at the reading position (42% down viewport)
+      const viewH = document.getElementById('scroll-container').clientHeight;
+      target = Math.min(totalHeight, Math.max(0, lineOffsets[nextIdx] - viewH * 0.42));
+    } else {
+      // Fallback: 28% viewport nudge when confidence mode is off
+      const viewH = document.getElementById('scroll-container').clientHeight;
+      target = Math.min(totalHeight, Math.max(0, scrollPos + direction * viewH * 0.28));
+    }
+
+    if (nudgeAnim) cancelAnimationFrame(nudgeAnim);
+
+    const startPos  = scrollPos;
+    const dist      = target - startPos;
+    const duration  = 220; // snappier for line-by-line
+    const startTime = performance.now();
+
+    function animNudge(ts) {
+      const p    = Math.min((ts - startTime) / duration, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      scrollPos  = startPos + dist * ease;
+      applyScroll(); updateProgress(); updateConfidenceLines();
+      if (p < 1) {
+        nudgeAnim = requestAnimationFrame(animNudge);
+      } else {
+        scrollPos = target;
+        applyScroll(); updateProgress(); updateConfidenceLines();
+        nudgeAnim = null;
+        if (scrollPos >= totalHeight) showEndScreen();
+      }
+    }
+
+    nudgeAnim = requestAnimationFrame(animNudge);
+    if (side) spawnTapFlashCenter(side);
   }
+
+  function manualForward() { nudgeScroll(1,  'right'); }
+  function manualBack()     { nudgeScroll(-1, 'left');  }
 
   // ── RESTART with animated scroll-to-top ──
   function restartScroll() {
@@ -1105,8 +1152,8 @@
       case 'Space':        e.preventDefault(); togglePlayPause(); break;
       case 'ArrowUp':      adjustSpeed(0.1); break;
       case 'ArrowDown':    adjustSpeed(-0.1); break;
-      case 'ArrowRight':   if (mode==='manual') manualForward(); break;
-      case 'ArrowLeft':    if (mode==='manual') manualBack(); break;
+      case 'ArrowRight':   nudgeScroll(1,  null); break;
+      case 'ArrowLeft':    nudgeScroll(-1, null); break;
       case 'KeyR':         restartScroll(); break;
       case 'Escape':       exitPrompter(); break;
       case 'Equal': case 'NumpadAdd':      adjustSize(2); break;
