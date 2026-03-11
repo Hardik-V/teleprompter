@@ -24,7 +24,7 @@ A clean, minimal teleprompter that works on Android, Windows, and any modern bro
 | `Space` | Play / Pause |
 | `↑ / ↓` | Increase / Decrease speed |
 | `← / →` | Back / Forward (manual mode) |
-| `R` | Restart from beginning (animated rewind) |
+| `R` | Restart from beginning |
 | `+ / -` | Increase / Decrease font size |
 | `Esc` | Return to editor |
 
