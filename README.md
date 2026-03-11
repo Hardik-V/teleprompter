@@ -1,4 +1,4 @@
-# Prompter — Teleprompter PWA
+# Prompter: Teleprompter PWA
 
 A clean, minimal teleprompter that works on Android, Windows, and any modern browser. Installable as a PWA — no browser UI, runs like a native app.
 
@@ -7,12 +7,17 @@ A clean, minimal teleprompter that works on Android, Windows, and any modern bro
 - **Auto-scroll** with adjustable speed
 - **Manual scroll**: tap right side to advance, left to go back
 - **Pause on tap** (auto mode)
-- **Font size control**
-- **Top fade**: text fades into darkness at the top, drawing eyes to the reading line
+- **Confidence mode**: text dims based on distance from the current line, drawing your eye naturally to where you are
+- **Current line highlight**: subtle highlight behind the active line — readable, not distracting
+- **Font size control** (editor + live in HUD)
+- **Max width control**: Narrow / Mid / Wide — useful for near-camera laptop use vs. tablet
+- **Alignment toggle**: Left or Centre aligned text
+- **Estimated time remaining**: live countdown shown bottom-right while scrolling
+- **Animated rewind**: restart button smoothly scrolls back to the top instead of snapping
 - **Progress bar** at the bottom
 - **HUD controls** that auto-hide after 3 seconds
 - **Offline support** via service worker
-- Saves your script and settings between sessions
+- Saves your script and all settings between sessions
 
 ## Keyboard Shortcuts (when in prompter mode)
 
@@ -21,7 +26,7 @@ A clean, minimal teleprompter that works on Android, Windows, and any modern bro
 | `Space` | Play / Pause |
 | `↑ / ↓` | Increase / Decrease speed |
 | `← / →` | Back / Forward (manual mode) |
-| `R` | Restart from beginning |
+| `R` | Restart from beginning (animated rewind) |
 | `+ / -` | Increase / Decrease font size |
 | `Esc` | Return to editor |
 
@@ -35,7 +40,7 @@ A clean, minimal teleprompter that works on Android, Windows, and any modern bro
 ### Windows (Chrome or Edge)
 1. Open the site URL
 2. Click the install icon in the address bar (or three-dot menu → **Install Prompter**)
-3. Opens in its own window: resize and drag near your webcam
+3. Opens in its own window — resize and drag near your webcam
 
 ## Deploy to GitHub Pages
 
