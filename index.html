@@ -590,9 +590,9 @@
 
     <div class="hud-divider"></div>
 
-    <button class="hud-btn" onclick="adjustSpeed(-0.2)">−</button>
+    <button class="hud-btn" onclick="adjustSpeed(-0.1)">−</button>
     <span class="hud-val" id="hud-speed">1.2</span>
-    <button class="hud-btn" onclick="adjustSpeed(0.2)">+</button>
+    <button class="hud-btn" onclick="adjustSpeed(0.1)">+</button>
 
     <div class="hud-divider"></div>
 
@@ -1103,8 +1103,8 @@
   function handleKey(e) {
     switch(e.code) {
       case 'Space':        e.preventDefault(); togglePlayPause(); break;
-      case 'ArrowUp':      adjustSpeed(0.2); break;
-      case 'ArrowDown':    adjustSpeed(-0.2); break;
+      case 'ArrowUp':      adjustSpeed(0.1); break;
+      case 'ArrowDown':    adjustSpeed(-0.1); break;
       case 'ArrowRight':   if (mode==='manual') manualForward(); break;
       case 'ArrowLeft':    if (mode==='manual') manualBack(); break;
       case 'KeyR':         restartScroll(); break;
