@@ -226,7 +226,6 @@
       font-size: var(--font-size);
       line-height: 1.58;
       text-align: var(--text-align);
-      white-space: pre-wrap;
       word-break: break-word;
     }
 
@@ -738,6 +737,53 @@
     showHud();
   }
 
+  // ── TEXT → DISPLAY LINES ──
+  const MAX_CHARS = 72;
+
+  function textToLines(text) {
+    const lines = [];
+
+    // First split into paragraphs (blank lines preserved as spacers)
+    const paragraphs = text.split(/\n/);
+
+    paragraphs.forEach(para => {
+      const trimmed = para.trim();
+      if (!trimmed) {
+        lines.push(''); // blank line spacer
+        return;
+      }
+
+      // Split paragraph into sentences — keep the punctuation attached
+      const sentences = trimmed.match(/[^.!?]+[.!?]+["']?|[^.!?]+$/g) || [trimmed];
+
+      sentences.forEach(raw => {
+        const sentence = raw.trim();
+        if (!sentence) return;
+
+        if (sentence.length <= MAX_CHARS) {
+          lines.push(sentence);
+        } else {
+          // Hard-wrap at word boundaries
+          const words = sentence.split(' ');
+          let current = '';
+          words.forEach(word => {
+            if (!current) {
+              current = word;
+            } else if ((current + ' ' + word).length <= MAX_CHARS) {
+              current += ' ' + word;
+            } else {
+              lines.push(current);
+              current = word;
+            }
+          });
+          if (current) lines.push(current);
+        }
+      });
+    });
+
+    return lines;
+  }
+
   // ── START ──
   function startPrompter() {
     const text = document.getElementById('script-input').value.trim();
@@ -748,7 +794,7 @@
     container.innerHTML = '';
     lineElements = [];
 
-    text.split('\n').forEach(line => {
+    textToLines(text).forEach(line => {
       const span = document.createElement('span');
       span.className = 'script-line';
       span.textContent = line || '\u00A0';
